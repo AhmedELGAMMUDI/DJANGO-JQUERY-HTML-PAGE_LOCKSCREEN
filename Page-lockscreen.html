@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}{% trans "Lock Screen" %}{% endblock title %}
+
+{% block content %}
+
+    {% block top_head %}
+        <link rel="stylesheet" href="{% static 'assets/css/footable/footable.bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/footable/footable-page.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/dataTables.bootstrap4.css' %}">
+        <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'assets/js/sweetalert2@9.js' %}"></script>
+        <script>
+            document.getElementById("header").style.display="none";
+            document.getElementById("sidebar").style.display="none";
+        </script>
+    {% endblock %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <script>
+                        Swal.fire({
+                            position: 'top-center',
+                            icon: 'error',
+                            title: 'Oops...',
+                            html: "<span class='ct-label-title'>{{ message }}</span>",
+                            showConfirmButton: false,
+                            timer: 3500
+                        })
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+        <section id="wrapper">
+            <div class="login-register" style="background-size: cover;background-repeat: no-repeat;background-position: center center;height: 100%;width: 100%;padding: 10% 0;position: fixed;">
+            <div class="login-box card" style="width: 400px; margin: 0 auto;">
+                <div class="card-body">
+                    
+                        <div class="form-group">
+                            <div class="col-xs-12 text-center">
+                                    {% if user.student %}
+                                         {% if user.student.photo %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{{ user.student.photo.url }}" alt=""  height="180" width="180">
+                                         {% elif user.student.gender == 1 %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{% static 'assets/images/user_male.png' %}" alt=""  height="180" width="180">
+                                         {% elif user.student.gender == 2 %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{% static 'assets/images/user_female.png' %}" alt=""  height="180" width="180">
+                                         {% endif %}
+                                    {% elif user.parent %}
+                                         {% if user.parent.photo %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{{ user.parent.photo.url }}" alt=""  height="180" width="180">
+                                         {% elif user.parent.gender == 1 %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{% static 'assets/images/user_male.png' %}" alt=""  height="180" width="180">
+                                         {% elif user.parent.gender == 2 %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{% static 'assets/images/user_female.png' %}" alt=""  height="180" width="180">
+                                         {% endif %}
+                                    {% elif user.staff %}
+                                         {% if user.staff.photo %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{{ user.staff.photo.url }}" alt=""  height="180" width="180">
+                                         {% elif user.staff.gender == 1 %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{% static 'assets/images/user_male.png' %}" alt=""  height="180" width="180">
+                                         {% elif user.staff.gender == 2 %}
+                                            <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" src="{% static 'assets/images/user_female.png' %}" alt=""  height="180" width="180">
+                                         {% endif %}
+                                    {% else %}
+                                         <img src="{% static 'assets/images/user_male.png' %}" alt="user"  height="180" width="180">
+                                    {% endif %}
+                                    
+                                    <h3 class='ct-label-title'>{{request.user.username}}</h3>
+                                </div>
+                            </div>
+
+                            <div class="form-group text-center">
+                                <form  method="post" class="form-horizontal form-material">
+                                    {% csrf_token %}
+                                    <div class="form-group ">
+                                        <div class="col-xs-12">
+                                            <input type="hidden" name="lastpage" value="{{request.META.HTTP_REFERER}}">
+                                            <input class="form-control ct-label-big" type="password"  name="password" placeholder="password">
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <div class="col-xs-12">
+                                            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">{% trans 'Login' %}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
